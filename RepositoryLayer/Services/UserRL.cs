@@ -3,6 +3,7 @@ using RepositoryLayer.Interface;
 using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RepositoryLayer.Class
@@ -35,6 +36,23 @@ namespace RepositoryLayer.Class
             catch (Exception e)
             {
                 throw e;
+            }
+        }
+
+        public bool Login(UserLogin userLogin)
+        {
+            try
+            {
+                UserModel user = new UserModel();
+                var result = dbContext.Users.Where(x => x.email == userLogin.email && x.password == userLogin.password).FirstOrDefault();
+                if (result != null)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }
