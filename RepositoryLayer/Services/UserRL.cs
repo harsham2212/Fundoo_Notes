@@ -29,8 +29,8 @@ namespace RepositoryLayer.Class
                 user.phoneNo = userPostModel.phoneNo;
                 user.address = userPostModel.address;
                 user.email = userPostModel.email;
-                user.password = userPostModel.password;
-                user.cpassword = userPostModel.cpassword;
+                user.password = StringCipher.Encrypt(userPostModel.password);
+                user.cpassword = StringCipher.Encrypt(userPostModel.cpassword);
 
                 user.registeredDate = DateTime.Now;
                 dbContext.Users.Add(user);
@@ -39,6 +39,20 @@ namespace RepositoryLayer.Class
             catch (Exception e)
             {
                 throw e;
+            }
+        }
+        public string EncryptPassword(string password)
+        {
+            try
+            {
+                byte[] encode = new byte[password.Length];
+                encode = Encoding.UTF8.GetBytes(password);
+                string encPassword = Convert.ToBase64String(encode);
+                return encPassword;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 

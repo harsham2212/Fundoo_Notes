@@ -62,26 +62,8 @@ namespace Fundoo_Notes.Controllers
                 throw e;
             }
         }
-        //[Authorize]
+        [Authorize]
         [HttpPut("resetpassword")]
-        //public ActionResult ResetPassword(string email, string password, string cpassword)
-        //{
-        //    try
-        //    {
-        //        if (password != cpassword)
-        //        {
-        //            return BadRequest(new { success = false, message = $"Paswords does not match" });
-        //        }
-        //        // var identity = User.Identity as ClaimsIdentity 
-        //        var result = FundooDBContext.Users.FirstOrDefault(x => x.mobileNo == mobileNo);
-        //        this.userBL.ResetPassword(email, password, cpassword);
-        //        return this.Ok(new { success = true, message = $"Password changed Successfully {email}" });
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw e;
-        //    }
-        //}
         public ActionResult ResetPassword(string email, string password, string cpassword)
         {
             try
