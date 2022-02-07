@@ -10,6 +10,6 @@ namespace RepositoryLayer.Interface
         void RegisterUser(UserPostModel userPostModel);
         public string Login(UserLogin userLogin);
         public bool ForgetPassword(string email);
-        
+        public void ResetPassword(string email, string password, string cpassword);
     }
 }

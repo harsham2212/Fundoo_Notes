@@ -95,5 +95,24 @@ namespace RepositoryLayer.Class
                 throw e;
             }
         }
+
+        public void ResetPassword(string email, string password, string cpassword)
+        {
+            try
+            {
+                UserModel user = new UserModel();
+                var result = dbContext.Users.FirstOrDefault(x => x.email == email);
+                if (result != null)
+                {
+                    result.password = password;
+                    result.cpassword = cpassword;
+                    dbContext.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }
