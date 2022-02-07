@@ -26,13 +26,25 @@ namespace BusinessLayer.Class
             }
         }
 
-        public bool Login(UserLogin userLogin)
+        public string Login(UserLogin userLogin)
         {
             try
             {
                 return userRL.Login(userLogin);
             }
-            catch(Exception)
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool ForgetPassword(string email)
+        {
+            try
+            {
+                return userRL.ForgetPassword(email);
+            }
+            catch (Exception)
             {
                 throw;
             }

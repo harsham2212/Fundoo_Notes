@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Services;
 using System;
@@ -20,7 +21,7 @@ namespace Fundoo_Notes.Controllers
             this.userBL = userBL;
             this.fundooDBContext = fundooDB;
         }
-        [HttpPost ("register")]
+        [HttpPost("register")]
         public ActionResult registerUser(UserPostModel userPostModel)
         {
             try
@@ -29,23 +30,37 @@ namespace Fundoo_Notes.Controllers
                 return this.Ok(new { success = true, message = $"Registration Successful{userPostModel.email}" });
             }
             catch (Exception e)
-            { 
+            {
                 throw e;
             }
         }
 
-        [HttpPost ("login")]
+        [HttpPost("login")]
         public ActionResult Login(UserLogin login)
         {
             try
             {
-                this.userBL.Login(login);
-                return this.Ok(new { success = true, message = $"Login Successful{login.email}" });
+                string result = this.userBL.Login(login);
+                return this.Ok(new { success = true, message = $"Login Successful{login.email},token={result}" });
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
+        [HttpPost("forgetpassword")]
+        public ActionResult ForgetPassword(string email)
+        {
+            try
+            {
+                this.userBL.ForgetPassword(email);
+                return this.Ok(new { success = true, message = $"Forget Password{email}" });
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }   
     }
 }

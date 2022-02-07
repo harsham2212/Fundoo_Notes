@@ -1,9 +1,12 @@
 ﻿using CommonLayer.User;
+using Microsoft.IdentityModel.Tokens;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 
 namespace RepositoryLayer.Class
@@ -39,20 +42,57 @@ namespace RepositoryLayer.Class
             }
         }
 
-        public bool Login(UserLogin userLogin)
+        public string Login(UserLogin userLogin)
         {
             try
             {
                 UserModel user = new UserModel();
                 var result = dbContext.Users.Where(x => x.email == userLogin.email && x.password == userLogin.password).FirstOrDefault();
                 if (result != null)
-                    return true;
+                    return GenerateJWTToken(userLogin.email, user.userId);
                 else
-                    return false;
+                    return null;
             }
             catch (Exception)
             {
                 throw;
+            }
+        }
+        // Generating Token
+        private static string GenerateJWTToken(string email, int userId)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenKey = Encoding.ASCII.GetBytes("THIS_IS_MY_KEY_TO_GENERATE_TOKEN");
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim("email", email),
+                    new Claim("userId", userId.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials =
+                new SigningCredentials(
+                    new SymmetricSecurityKey(tokenKey),
+                    SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+        public bool ForgetPassword(string email)
+        {
+            try
+            {
+                UserModel user = new UserModel();
+                var result = dbContext.Users.Where(x => x.email == email).FirstOrDefault();
+                if (result != null)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
     }
