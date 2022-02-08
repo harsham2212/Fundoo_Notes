@@ -6,12 +6,13 @@ using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace Fundoo_Notes.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("Controller")]
+
     public class UserController : ControllerBase
     {
         FundooDBContext fundooDBContext;
@@ -21,8 +22,19 @@ namespace Fundoo_Notes.Controllers
             this.userBL = userBL;
             this.fundooDBContext = fundooDB;
         }
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        private IActionResult View()
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpPost("register")]
-        public ActionResult registerUser(UserPostModel userPostModel)
+        public ActionResult RegisterUser(UserPostModel userPostModel)
         {
             try
             {
@@ -35,13 +47,17 @@ namespace Fundoo_Notes.Controllers
             }
         }
 
+
         [HttpPost("login")]
-        public ActionResult Login(UserLogin login)
+        public ActionResult LogInUser(UserLogin userLogin)
         {
             try
             {
-                string result = this.userBL.Login(login);
-                return this.Ok(new { success = true, message = $"Login Successful{login.email},token={result}" });
+                var result = this.userBL.Login(userLogin);
+                if (result != null)
+                    return this.Ok(new { success = true, message = $"LogIn Successful {userLogin.email}, Token = {result}" });
+                else
+                    return this.BadRequest(new { Success = false, message = "Invalid Username and Password" });
             }
             catch (Exception e)
             {
@@ -49,37 +65,59 @@ namespace Fundoo_Notes.Controllers
             }
         }
 
-        [HttpPost("forgetpassword")]
+        [HttpPut("ForgotPassword")]
         public ActionResult ForgetPassword(string email)
         {
             try
             {
                 this.userBL.ForgetPassword(email);
-                return this.Ok(new { success = true, message = $"Forget Password{email}" });
+                return this.Ok(new { success = true, message = $"forgot password sucessfull" });
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
-        [Authorize]
+
+        [AllowAnonymous]
         [HttpPut("resetpassword")]
         public ActionResult ResetPassword(string email, string password, string cpassword)
         {
             try
             {
-                if (password != cpassword)
+
+                var identity = User.Identity as ClaimsIdentity;
+                if (identity != null)
                 {
-                    return BadRequest(new { success = false, message = $"Paswords does not match" });
+                    IEnumerable<Claim> claims = identity.Claims;
+                    var UserEmailObject = claims.Where(p => p.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").FirstOrDefault()?.Value;
+                    this.userBL.ResetPassword(email, password,cpassword);
+                    return Ok(new { success = true, message = "Password Changed Sucessfully", email = $"{UserEmailObject}" });
                 }
-                    // var identity = User.Identity as ClaimsIdentity 
-                    this.userBL.ResetPassword(email, password, cpassword);
-                return this.Ok(new { success = true, message = $"Password changed Successfully {email}" });
+                return this.BadRequest(new { success = false, message = $"Password changed unSuccessfully" });
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
+        [HttpGet("getallusers")]
+        public ActionResult GetAllUsers()
+        {
+            try
+            {
+                var result = this.userBL.GetAllUsers();
+                return this.Ok(new { success = true, message = $"Table data", data = result });
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+
     }
 }
+
+

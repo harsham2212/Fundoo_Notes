@@ -42,11 +42,11 @@ namespace BusinessLayer.Class
         {
             try
             {
-                return userRL.ForgetPassword(email);
+                 return userRL.ForgetPassword(email);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw e;
             }
         }
 
@@ -59,6 +59,18 @@ namespace BusinessLayer.Class
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public List<UserModel> GetAllUsers()
+        {
+            try
+            {
+                return userRL.GetAllUsers();
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
     }

@@ -11,6 +11,6 @@ namespace BusinessLayer.Interface
         public string Login(UserLogin userLogin);
         public bool ForgetPassword(string email);
         void ResetPassword(string email, string password, string cpassword);
-
+        List<UserModel> GetAllUsers();
     }
 }
