@@ -11,7 +11,7 @@ using System.Security.Claims;
 namespace Fundoo_Notes.Controllers
 {
     [ApiController]
-    [Route("Controller")]
+    [Route("User")]
 
     public class UserController : ControllerBase
     {
@@ -39,7 +39,7 @@ namespace Fundoo_Notes.Controllers
             try
             {
                 this.userBL.RegisterUser(userPostModel);
-                return this.Ok(new { success = true, message = $"Registration Successful{userPostModel.email}" });
+                return this.Ok(new { success = true, message = $"Registration Successful:,{userPostModel.email}" });
             }
             catch (Exception e)
             {
@@ -53,11 +53,11 @@ namespace Fundoo_Notes.Controllers
         {
             try
             {
-                var result = this.userBL.Login(userLogin);
+                string result = this.userBL.Login(userLogin);
                 if (result != null)
-                    return this.Ok(new { success = true, message = $"LogIn Successful {userLogin.email}, Token = {result}" });
+                    return this.Ok(new { success = true, message = $"LogIn Successful: {userLogin.email}, Token = {result}" }); 
                 else
-                    return this.BadRequest(new { Success = false, message = "Invalid Username and Password" });
+                    return this.BadRequest(new { Success = false, message = "Invalid Username and Password" });        
             }
             catch (Exception e)
             {
@@ -70,8 +70,16 @@ namespace Fundoo_Notes.Controllers
         {
             try
             {
-                this.userBL.ForgetPassword(email);
-                return this.Ok(new { success = true, message = $"forgot password sucessfull" });
+                var result = fundooDBContext.Users.FirstOrDefault(x => x.email == email);
+                if (result == null)
+                {
+                    return this.Ok(new { success = false, message = $"Email not registered" });
+                }
+                else
+                {
+                    this.userBL.ForgetPassword(email);
+                    return this.BadRequest(new { success = true, message = $"Tokken sent for resetting Password" });
+                }  
             }
             catch (Exception e)
             {
@@ -79,23 +87,33 @@ namespace Fundoo_Notes.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpPut("resetpassword")]
-        public ActionResult ResetPassword(string email, string password, string cpassword)
+        public ActionResult ResetPassword(string password, string cpassword)
         {
             try
             {
-
+                if(password != cpassword){
+                    return this.BadRequest(new { success = false, message = $"Confirm Password not match with Password" });
+                }
                 var identity = User.Identity as ClaimsIdentity;
                 if (identity != null)
                 {
                     IEnumerable<Claim> claims = identity.Claims;
                     var UserEmailObject = claims.Where(p => p.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").FirstOrDefault()?.Value;
-                    this.userBL.ResetPassword(email, password,cpassword);
-                    return Ok(new { success = true, message = "Password Changed Sucessfully", email = $"{UserEmailObject}" });
+                    if (UserEmailObject == null)
+                    {
+                        return this.BadRequest(new { success = false, message = $"Password not Reset" });
+                    }
+                    else
+                    {
+                        this.userBL.ResetPassword(UserEmailObject, password, cpassword);
+                        return Ok(new { success = true, message = "Password Reset Sucessfully" });
+                    }
                 }
-                return this.BadRequest(new { success = false, message = $"Password changed unSuccessfully" });
+                return this.BadRequest(new { success = false, message = $"Password not Changed" });
             }
+            
             catch (Exception e)
             {
                 throw e;
@@ -115,9 +133,5 @@ namespace Fundoo_Notes.Controllers
                 throw e;
             }
         }
-
-
     }
 }
-
-

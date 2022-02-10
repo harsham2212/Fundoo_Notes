@@ -158,7 +158,7 @@ namespace RepositoryLayer.Class
 
         }
 
-        public void ResetPassword(string email, string password,string cpassword)
+        public void ResetPassword(string email, string password, string cpassword)
         {
             try
             {
@@ -243,8 +243,6 @@ namespace RepositoryLayer.Class
                 }
                 // Handle other sources of MessageQueueException.
             }
-
         }
-
     }
 }
