@@ -87,7 +87,76 @@ namespace RepositoryLayer.Services
         public IEnumerable<Note> GetAllNotes()
         {
             return dbContext.Notes.ToList();
-        }    
+        }
+
+        public async Task ArchieveNote(int noteId)
+        {
+            try
+            {
+                var note = dbContext.Notes.FirstOrDefault(u => u.NoteId == noteId);
+                note.IsArchive = true;
+                await dbContext.SaveChangesAsync();
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task Color(int NoteId, string color)
+        {
+            try
+            {
+                var note = dbContext.Notes.FirstOrDefault(u => u.NoteId == NoteId);
+                note.Color = color;
+                await dbContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task PinNote(int NoteId)
+        {
+            try
+            {
+                var note = dbContext.Notes.FirstOrDefault(x => x.NoteId == NoteId);
+                if (note != null)
+                {
+                    note.IsPin = true;
+
+                    await dbContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task TrashNote(int NoteId)
+        {
+            try
+            {
+                Note note = dbContext.Notes.FirstOrDefault(e => e.NoteId == NoteId);
+                if (note != null)
+                {
+                    note.IsTrash = true;
+                    await dbContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public IEnumerable<Note> GetAllNotesByNoteId(int NoteId)
+        {
+            return dbContext.Notes.Where(Y => Y.NoteId == NoteId).ToList();
+        }
     }   
 }
 
