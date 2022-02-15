@@ -21,7 +21,6 @@ namespace RepositoryLayer.Class
             this.dbContext = dbContext;
         }
 
-
         public void RegisterUser(UserPostModel userPostModel)
         {
             try
@@ -53,7 +52,7 @@ namespace RepositoryLayer.Class
             try
             {
                 UserModel user = new UserModel();
-                var result = dbContext.Users.Where(x => x.email == userLogin.email && x.password == userLogin.password).FirstOrDefault();
+                var result = dbContext.Users.Where(x => x.email == userLogin.email && x.cpassword == userLogin.cpassword).FirstOrDefault();
                 if (result != null)
                     return GenerateJWTToken(userLogin.email, user.userId);
                 else
@@ -116,7 +115,7 @@ namespace RepositoryLayer.Class
             try
             {
                 var checkemail = dbContext.Users.FirstOrDefault(e => e.email == email);
-                //var checkemail = dbContex.Users.FirstOrDefault(e => e.Email == email);
+              
                 if (checkemail != null)
                 {
                     MessageQueue queue;
@@ -196,7 +195,6 @@ namespace RepositoryLayer.Class
                 byte[] encode = new byte[password.Length];
 
                 encode = Encoding.UTF8.GetBytes(password);
-                //byte encPassword = Convert.FromBase64String(encode);
                 string encPassword = Convert.ToBase64String(encode);
                 return encPassword;
             }
@@ -241,7 +239,6 @@ namespace RepositoryLayer.Class
                     Console.WriteLine("Access is denied. " +
                         "Queue might be a system queue.");
                 }
-                // Handle other sources of MessageQueueException.
             }
         }
     }

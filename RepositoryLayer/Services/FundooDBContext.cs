@@ -1,4 +1,5 @@
-﻿using CommonLayer.User;
+﻿using CommonLayer.Note;
+using CommonLayer.User;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,13 @@ namespace RepositoryLayer.Services
 
         }
         public DbSet<UserModel> Users { get; set; }
-        protected override void
-        OnModelCreating(ModelBuilder modelBuilder)
+        public DbSet<Note> Notes { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<UserModel>()
-            .HasIndex(u => u.email)
-            .IsUnique();
+               .HasIndex(u => u.email)
+               .IsUnique();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Fundoo_Notes.Controllers
         {
             throw new NotImplementedException();
         }
-
+        //[HttpPost("register/{users}")]
         [HttpPost("register")]
         public ActionResult RegisterUser(UserPostModel userPostModel)
         {
@@ -65,7 +65,7 @@ namespace Fundoo_Notes.Controllers
             }
         }
 
-        [HttpPut("ForgotPassword")]
+        [HttpPut("forgotpassword/{email}")]
         public ActionResult ForgetPassword(string email)
         {
             try
@@ -88,7 +88,7 @@ namespace Fundoo_Notes.Controllers
         }
 
         [Authorize]
-        [HttpPut("resetpassword")]
+        [HttpPut("resetpassword/{password}/{cpassword}")]
         public ActionResult ResetPassword(string password, string cpassword)
         {
             try
