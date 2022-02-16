@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace CommonLayer.Note
+namespace RepositoryLayer.Entities
 {
     public class Note
     {
@@ -13,6 +13,7 @@ namespace CommonLayer.Note
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int NoteId { get; set; }
+        //[ForeignKey("User")]
         public int userId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -23,5 +24,7 @@ namespace CommonLayer.Note
         public bool IsArchive { get; set; }
         public bool IsPin { get; set; }
         public bool IsTrash { get; set; }
+
+        //public virtual UserModel user { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace CommonLayer.User
+namespace RepositoryLayer.Entities
 {
     public class UserModel
     {
@@ -21,5 +21,7 @@ namespace CommonLayer.User
         public string cpassword { get; set; }
         public DateTime registeredDate { get; set; }
         public DateTime modifiedDate { get; set; }
+
+        public virtual ICollection<Note> Notes { get; set; }
     }
 }

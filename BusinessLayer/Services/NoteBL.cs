@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Note;
 using DocumentFormat.OpenXml.ExtendedProperties;
+using RepositoryLayer.Entities;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Services;
 using System;
@@ -57,11 +58,11 @@ namespace BusinessLayer.Services
         }
 
 
-        public IEnumerable<Note> GetAllNotes()
+        public async Task<List<Note>> GetAllNotes()
         {
             try
             {
-                return noteRL.GetAllNotes();
+                return await noteRL.GetAllNotes();
             }
             catch (Exception e)
             {

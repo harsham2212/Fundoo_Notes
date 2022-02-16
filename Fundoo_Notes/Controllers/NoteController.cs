@@ -3,10 +3,15 @@ using BusinessLayer.Services;
 using CommonLayer.Note;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
+using RepositoryLayer.Entities;
 using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Fundoo_Notes.Controllers
@@ -16,12 +21,16 @@ namespace Fundoo_Notes.Controllers
 
     public class NoteController : ControllerBase
     {
+        private readonly IMemoryCache memoryCache;
+        private readonly IDistributedCache distributedCache;
         FundooDBContext fundooDBContext;
         INotesBL NotesBL;
-        public NoteController(INotesBL NotesBL, FundooDBContext fundooDB)
+        public NoteController(INotesBL NotesBL, FundooDBContext fundooDB, IMemoryCache memoryCache, IDistributedCache distributedCache)
         {
             this.NotesBL = NotesBL;
             this.fundooDBContext = fundooDB;
+            this.memoryCache = memoryCache;
+            this.distributedCache = distributedCache;
         }
 
         [Authorize]
@@ -30,9 +39,10 @@ namespace Fundoo_Notes.Controllers
         {
             try
                 {
-                var userId = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
-                int UserId = Int32.Parse(userId.Value);
-                await this.NotesBL.AddNotes(notesModel, UserId);
+                //var userId = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                //int UserId = Int32.Parse(userId.Value);
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                await this.NotesBL.AddNotes(notesModel, userId);
 
                 return this.Ok(new { success = true, message = $"Note Created Sucessfully" });
             }
@@ -85,15 +95,33 @@ namespace Fundoo_Notes.Controllers
             }
         }
 
-        [HttpGet("getallnotes")]
-        public IEnumerable<Note> GetAllNotes()
+        // [Authorize]
+        [HttpGet("getAllNoteusingRedis")]
+        public async Task<IActionResult> GetAllNotes()
         {
             try
             {
-                return NotesBL.GetAllNotes();
+                var cacheKey = "NoteList";
+                string serializedNoteList;
+                var noteList = new List<Note>();
+                var redisnoteList = await distributedCache.GetAsync(cacheKey);
+                if (redisnoteList != null)
+                {
+                    serializedNoteList = Encoding.UTF8.GetString(redisnoteList);
+                    noteList = JsonConvert.DeserializeObject<List<Note>>(serializedNoteList);
+                }
+                else
+                {
+                    noteList = await NotesBL.GetAllNotes();
+                    serializedNoteList = JsonConvert.SerializeObject(noteList);
+                    redisnoteList = Encoding.UTF8.GetBytes(serializedNoteList);
+                }
+                return this.Ok(noteList);
+
             }
             catch (Exception)
             {
+
                 throw;
             }
         }

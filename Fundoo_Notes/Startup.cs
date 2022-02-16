@@ -38,6 +38,11 @@ namespace Fundoo_Notes
         {
             services.AddDbContext<FundooDBContext>(opts => opts.UseSqlServer(Configuration["ConnectionStrings:Fundoo_Notes"]));
             services.AddControllers();
+            services.AddMemoryCache();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = "localhost:6379";
+            });
             //adds swagger generator to the services collection
             services.AddSwaggerGen(setup =>
             {

@@ -10,7 +10,7 @@ using RepositoryLayer.Services;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(FundooDBContext))]
-    [Migration("20220214201954_NotesTable")]
+    [Migration("20220215181606_NotesTable")]
     partial class NotesTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace RepositoryLayer.Migrations
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("CommonLayer.Note.Note", b =>
+            modelBuilder.Entity("RepositoryLayer.Entities.Note", b =>
                 {
                     b.Property<int>("NoteId")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,7 @@ namespace RepositoryLayer.Migrations
                     b.ToTable("Notes");
                 });
 
-            modelBuilder.Entity("CommonLayer.User.UserModel", b =>
+            modelBuilder.Entity("RepositoryLayer.Entities.UserModel", b =>
                 {
                     b.Property<int>("userId")
                         .ValueGeneratedOnAdd()
@@ -111,14 +111,14 @@ namespace RepositoryLayer.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("CommonLayer.Note.Note", b =>
+            modelBuilder.Entity("RepositoryLayer.Entities.Note", b =>
                 {
-                    b.HasOne("CommonLayer.User.UserModel", null)
+                    b.HasOne("RepositoryLayer.Entities.UserModel", null)
                         .WithMany("Notes")
                         .HasForeignKey("UserModeluserId");
                 });
 
-            modelBuilder.Entity("CommonLayer.User.UserModel", b =>
+            modelBuilder.Entity("RepositoryLayer.Entities.UserModel", b =>
                 {
                     b.Navigation("Notes");
                 });

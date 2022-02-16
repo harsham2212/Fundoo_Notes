@@ -1,6 +1,7 @@
 ﻿using CommonLayer.Note;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using RepositoryLayer.Entities;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace RepositoryLayer.Services
                 var user = dbContext.Users.FirstOrDefault(x => x.userId == userId);
                 Note note = new Note();
                 note.NoteId = new Note().NoteId;
+                //note.userId = userId;
                 note.Title = notesModel.Title;
                 note.Description = notesModel.Description;
                 note.IsArchive = false;
@@ -84,9 +86,9 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public IEnumerable<Note> GetAllNotes()
+        public async Task<List<Note>> GetAllNotes()
         {
-            return dbContext.Notes.ToList();
+            return await dbContext.Notes.ToListAsync();
         }
 
         public async Task ArchieveNote(int noteId)

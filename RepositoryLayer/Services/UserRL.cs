@@ -1,6 +1,7 @@
 ﻿using CommonLayer.User;
 using Experimental.System.Messaging;
 using Microsoft.IdentityModel.Tokens;
+using RepositoryLayer.Entities;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Services;
 using System;
@@ -193,7 +194,6 @@ namespace RepositoryLayer.Class
             try
             {
                 byte[] encode = new byte[password.Length];
-
                 encode = Encoding.UTF8.GetBytes(password);
                 string encPassword = Convert.ToBase64String(encode);
                 return encPassword;
