@@ -53,9 +53,10 @@ namespace RepositoryLayer.Class
             try
             {
                 UserModel user = new UserModel();
-                var result = dbContext.Users.Where(x => x.email == userLogin.email && x.cpassword == userLogin.cpassword).FirstOrDefault();
+                var result = dbContext.Users.Where(x => x.email == userLogin.email && x.password == userLogin.password).FirstOrDefault();
+                int Id = result.userId;
                 if (result != null)
-                    return GenerateJWTToken(userLogin.email, user.userId);
+                    return GenerateJWTToken(userLogin.email, Id);
                 else
                     return null;
             }

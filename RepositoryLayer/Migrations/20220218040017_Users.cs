@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RepositoryLayer.Migrations
 {
-    public partial class NotesTable : Migration
+    public partial class Users : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,7 +32,7 @@ namespace RepositoryLayer.Migrations
                 name: "Notes",
                 columns: table => new
                 {
-                    NoteId = table.Column<int>(type: "int", nullable: false)
+                    noteId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     userId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -43,24 +43,23 @@ namespace RepositoryLayer.Migrations
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsArchive = table.Column<bool>(type: "bit", nullable: false),
                     IsPin = table.Column<bool>(type: "bit", nullable: false),
-                    IsTrash = table.Column<bool>(type: "bit", nullable: false),
-                    UserModeluserId = table.Column<int>(type: "int", nullable: true)
+                    IsTrash = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Notes", x => x.NoteId);
+                    table.PrimaryKey("PK_Notes", x => x.noteId);
                     table.ForeignKey(
-                        name: "FK_Notes_Users_UserModeluserId",
-                        column: x => x.UserModeluserId,
+                        name: "FK_Notes_Users_userId",
+                        column: x => x.userId,
                         principalTable: "Users",
                         principalColumn: "userId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notes_UserModeluserId",
+                name: "IX_Notes_userId",
                 table: "Notes",
-                column: "UserModeluserId");
+                column: "userId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_email",

@@ -12,8 +12,8 @@ namespace RepositoryLayer.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
-        public int NoteId { get; set; }
-        //[ForeignKey("User")]
+        public int noteId { get; set; }
+        [ForeignKey("User")]
         public int userId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -25,6 +25,6 @@ namespace RepositoryLayer.Entities
         public bool IsPin { get; set; }
         public bool IsTrash { get; set; }
 
-        //public virtual UserModel user { get; set; }
+        public virtual UserModel user { get; set; }
     }
 }

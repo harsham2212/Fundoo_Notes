@@ -10,8 +10,8 @@ using RepositoryLayer.Services;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(FundooDBContext))]
-    [Migration("20220215181606_NotesTable")]
-    partial class NotesTable
+    [Migration("20220218040017_Users")]
+    partial class Users
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace RepositoryLayer.Migrations
 
             modelBuilder.Entity("RepositoryLayer.Entities.Note", b =>
                 {
-                    b.Property<int>("NoteId")
+                    b.Property<int>("noteId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -55,15 +55,12 @@ namespace RepositoryLayer.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserModeluserId")
-                        .HasColumnType("int");
-
                     b.Property<int>("userId")
                         .HasColumnType("int");
 
-                    b.HasKey("NoteId");
+                    b.HasKey("noteId");
 
-                    b.HasIndex("UserModeluserId");
+                    b.HasIndex("userId");
 
                     b.ToTable("Notes");
                 });
@@ -113,14 +110,13 @@ namespace RepositoryLayer.Migrations
 
             modelBuilder.Entity("RepositoryLayer.Entities.Note", b =>
                 {
-                    b.HasOne("RepositoryLayer.Entities.UserModel", null)
-                        .WithMany("Notes")
-                        .HasForeignKey("UserModeluserId");
-                });
+                    b.HasOne("RepositoryLayer.Entities.UserModel", "user")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("RepositoryLayer.Entities.UserModel", b =>
-                {
-                    b.Navigation("Notes");
+                    b.Navigation("user");
                 });
 #pragma warning restore 612, 618
         }

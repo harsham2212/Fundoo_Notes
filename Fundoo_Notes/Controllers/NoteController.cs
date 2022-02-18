@@ -95,7 +95,7 @@ namespace Fundoo_Notes.Controllers
             }
         }
 
-        // [Authorize]
+        [Authorize]
         [HttpGet("getAllNoteusingRedis")]
         public async Task<IActionResult> GetAllNotes()
         {
@@ -117,7 +117,6 @@ namespace Fundoo_Notes.Controllers
                     redisnoteList = Encoding.UTF8.GetBytes(serializedNoteList);
                 }
                 return this.Ok(noteList);
-
             }
             catch (Exception)
             {

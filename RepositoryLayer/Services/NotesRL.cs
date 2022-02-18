@@ -24,15 +24,15 @@ namespace RepositoryLayer.Services
             {
                 var user = dbContext.Users.FirstOrDefault(x => x.userId == userId);
                 Note note = new Note();
-                note.NoteId = new Note().NoteId;
-                //note.userId = userId;
+                note.noteId = new Note().noteId;
+                note.userId = userId;
                 note.Title = notesModel.Title;
                 note.Description = notesModel.Description;
                 note.IsArchive = false;
                 note.IsReminder = false;
-                note.Color = "#fff";
+                note.Color = notesModel.Color;
                 note.IsPin = false;
-                note.CreateDate = DateTime.Now; 
+                note.CreateDate = DateTime.Now;
 
                 dbContext.Notes.Add(note);
                 await dbContext.SaveChangesAsync();
@@ -47,7 +47,7 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                var UpdateNote = this.dbContext.Notes.Where(Y => Y.NoteId == NoteId).FirstOrDefault();
+                var UpdateNote = this.dbContext.Notes.Where(Y => Y.noteId == NoteId).FirstOrDefault();
                 if (UpdateNote != null)
                 {
                     UpdateNote.Title = notes.Title;
@@ -71,7 +71,7 @@ namespace RepositoryLayer.Services
         {
             try
             { 
-                var ValidNote = this.dbContext.Notes.Where(Y => Y.NoteId == NoteId).FirstOrDefault();
+                var ValidNote = this.dbContext.Notes.Where(Y => Y.noteId == NoteId).FirstOrDefault();
                 this.dbContext.Notes.Remove(ValidNote);
                 int result = this.dbContext.SaveChanges();
                 if (result > 0)
@@ -80,9 +80,9 @@ namespace RepositoryLayer.Services
                 }
                 return false;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw e;
             }
         }
 
@@ -95,7 +95,7 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                var note = dbContext.Notes.FirstOrDefault(u => u.NoteId == noteId);
+                var note = dbContext.Notes.FirstOrDefault(u => u.noteId == noteId);
                 note.IsArchive = true;
                 await dbContext.SaveChangesAsync();
 
@@ -110,7 +110,7 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                var note = dbContext.Notes.FirstOrDefault(u => u.NoteId == NoteId);
+                var note = dbContext.Notes.FirstOrDefault(u => u.noteId == NoteId);
                 note.Color = color;
                 await dbContext.SaveChangesAsync();
             }
@@ -124,7 +124,7 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                var note = dbContext.Notes.FirstOrDefault(x => x.NoteId == NoteId);
+                var note = dbContext.Notes.FirstOrDefault(x => x.noteId == NoteId);
                 if (note != null)
                 {
                     note.IsPin = true;
@@ -142,7 +142,7 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                Note note = dbContext.Notes.FirstOrDefault(e => e.NoteId == NoteId);
+                Note note = dbContext.Notes.FirstOrDefault(e => e.noteId == NoteId);
                 if (note != null)
                 {
                     note.IsTrash = true;
@@ -157,7 +157,7 @@ namespace RepositoryLayer.Services
 
         public IEnumerable<Note> GetAllNotesByNoteId(int NoteId)
         {
-            return dbContext.Notes.Where(Y => Y.NoteId == NoteId).ToList();
+            return dbContext.Notes.Where(Y => Y.noteId == NoteId).ToList();
         }
     }   
 }
