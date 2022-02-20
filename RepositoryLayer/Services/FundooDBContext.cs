@@ -17,6 +17,7 @@ namespace RepositoryLayer.Services
         public DbSet<UserModel> Users { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<Label> Label { get; set; }
+        public DbSet<UserAddress> Address { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

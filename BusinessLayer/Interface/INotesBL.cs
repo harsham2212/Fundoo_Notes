@@ -15,9 +15,9 @@ namespace BusinessLayer.Interface
         public bool DeleteNotes(int NoteId);
         Task<List<Note>> GetAllNotes();
         public Task Color(int NoteId, string color);
-        public Task ArchieveNote(int NoteId);
-        public Task PinNote(int NoteId);
-        public Task TrashNote(int NoteId);
+        public Task ArchieveNote(int NoteId, int userId);
+        public Task PinNote(int NoteId, int userId);
+        public Task TrashNote(int NoteId, int userId);
         public IEnumerable<Note> GetAllNotesByNoteId(int NoteId);
     }
 }

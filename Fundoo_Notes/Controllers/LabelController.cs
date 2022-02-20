@@ -60,7 +60,7 @@ namespace Fundoo_Notes.Controllers
                 }
                 else
                 {
-                    return this.BadRequest(new { Success = false, message = "Note with given ID not found" });
+                    return this.BadRequest(new { Success = false, message = "Note with NoteId not found" });
                 }
             }
             catch (Exception e)
@@ -68,8 +68,8 @@ namespace Fundoo_Notes.Controllers
                 throw e;
             }
         }
-
-        [HttpDelete("deletelabel/{labelId}")]
+        [Authorize]
+        [HttpDelete("deleteLabel/{labelId}")]
         public IActionResult DeleteLabel(int labelId)
         {
             try
@@ -90,7 +90,7 @@ namespace Fundoo_Notes.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetAllLabels")]
+        [HttpGet("getAllLabels")]
         public async Task<IActionResult> GetAllLabels()
         {
             try
@@ -109,7 +109,7 @@ namespace Fundoo_Notes.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetLabelsByNoteID/{noteId}")]
+        [HttpGet("getLabelsByNoteID/{noteId}")]
         public async Task<IActionResult> GetLabelsByNoteID(int noteId)
         {
             try

@@ -17,11 +17,11 @@ namespace BusinessLayer.Services
             this.labelRL = labelRL;
         }
 
-        public async Task CreateLabel(LabelModel labelModel, int userId, int NoteId)
+        public async Task CreateLabel(LabelModel labelModel, int noteId, int userId)
         {
             try
             {
-                await labelRL.CreateLabel(labelModel, userId, NoteId);
+                await labelRL.CreateLabel(labelModel, noteId, userId);
             }
             catch (Exception e)
             {

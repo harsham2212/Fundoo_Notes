@@ -9,7 +9,7 @@ namespace BusinessLayer.Interface
 {
     public interface ILabelBL
     {
-        public Task CreateLabel(LabelModel labelModel, int userId,int NoteId );
+        public Task CreateLabel(LabelModel labelModel, int noteId, int userId);
         public bool UpdateLabel(int LabelId, LabelModel labelModel);
         public Task<List<Label>> GetLabelsByNoteID(int userId, int NoteId);
         public Task<List<Label>> GetAllLabels(int userId);

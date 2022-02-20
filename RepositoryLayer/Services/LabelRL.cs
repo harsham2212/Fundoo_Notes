@@ -83,7 +83,7 @@ namespace RepositoryLayer.Services
 
         public async Task<List<Label>> GetAllLabels(int userId)
         {
-            Label labels = new Label();
+            Label label = new Label();
             try
             {
                 return await dbContext.Label.Where(u => u.userId == userId)
@@ -91,9 +91,9 @@ namespace RepositoryLayer.Services
                     .Include(u => u.User)
                     .ToListAsync();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw ex;
+                throw e;
             }
         }
 
@@ -106,9 +106,9 @@ namespace RepositoryLayer.Services
                     .Include(u => u.User)
                     .ToListAsync();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw e;
             }
         }
     }

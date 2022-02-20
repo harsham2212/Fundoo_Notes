@@ -91,11 +91,11 @@ namespace RepositoryLayer.Services
             return await dbContext.Notes.ToListAsync();
         }
 
-        public async Task ArchieveNote(int noteId)
+        public async Task ArchieveNote(int noteId, int userId)
         {
             try
             {
-                var note = dbContext.Notes.FirstOrDefault(u => u.noteId == noteId);
+                var note = dbContext.Notes.FirstOrDefault(u => u.noteId == noteId && u.userId ==userId);
                 note.IsArchive = true;
                 await dbContext.SaveChangesAsync();
 
@@ -120,11 +120,11 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public async Task PinNote(int NoteId)
+        public async Task PinNote(int NoteId,int userId)
         {
             try
             {
-                var note = dbContext.Notes.FirstOrDefault(x => x.noteId == NoteId);
+                var note = dbContext.Notes.FirstOrDefault(x => x.noteId == NoteId && x.userId== userId);
                 if (note != null)
                 {
                     note.IsPin = true;
@@ -138,11 +138,11 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public async Task TrashNote(int NoteId)
+        public async Task TrashNote(int NoteId,int userId)
         {
             try
             {
-                Note note = dbContext.Notes.FirstOrDefault(e => e.noteId == NoteId);
+                Note note = dbContext.Notes.FirstOrDefault(e => e.noteId == NoteId && e.userId ==userId);
                 if (note != null)
                 {
                     note.IsTrash = true;

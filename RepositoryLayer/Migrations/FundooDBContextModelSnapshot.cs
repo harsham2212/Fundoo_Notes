@@ -89,6 +89,32 @@ namespace RepositoryLayer.Migrations
                     b.ToTable("Notes");
                 });
 
+            modelBuilder.Entity("RepositoryLayer.Entities.UserAddress", b =>
+                {
+                    b.Property<int>("AddressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AddressId");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("Address");
+                });
+
             modelBuilder.Entity("RepositoryLayer.Entities.UserModel", b =>
                 {
                     b.Property<int>("userId")
@@ -160,6 +186,17 @@ namespace RepositoryLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("user");
+                });
+
+            modelBuilder.Entity("RepositoryLayer.Entities.UserAddress", b =>
+                {
+                    b.HasOne("RepositoryLayer.Entities.UserModel", "User")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

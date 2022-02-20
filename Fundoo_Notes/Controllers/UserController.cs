@@ -65,7 +65,7 @@ namespace Fundoo_Notes.Controllers
             }
         }
 
-        [HttpPut("forgotpassword/{email}")]
+        [HttpPut("forgotPassword/{email}")]
         public ActionResult ForgetPassword(string email)
         {
             try
@@ -88,7 +88,7 @@ namespace Fundoo_Notes.Controllers
         }
 
         [Authorize]
-        [HttpPut("resetpassword/{password}/{cpassword}")]
+        [HttpPut("resetPassword/{password}/{cpassword}")]
         public ActionResult ResetPassword(string password, string cpassword)
         {
             try
@@ -120,7 +120,8 @@ namespace Fundoo_Notes.Controllers
             }
         }
 
-        [HttpGet("getallusers")]
+        [Authorize]
+        [HttpGet("getAllUsers")]
         public ActionResult GetAllUsers()
         {
             try

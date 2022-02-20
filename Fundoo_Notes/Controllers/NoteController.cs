@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace Fundoo_Notes.Controllers
 {
     [ApiController]
-    [Route("Note")]
+    [Route("note")]
 
     public class NoteController : ControllerBase
     {
@@ -53,7 +53,7 @@ namespace Fundoo_Notes.Controllers
         }
 
         [Authorize]
-        [HttpPut("updatenotes/{NoteId}")]
+        [HttpPut("updateNotes/{NoteId}")]
         public IActionResult UpdateNotes(NotePostModel notes, int NoteId)
         {
             try
@@ -75,7 +75,7 @@ namespace Fundoo_Notes.Controllers
         }
 
         [Authorize]
-        [HttpDelete("deletenotes/{NoteId}")]
+        [HttpDelete("deleteNotes/{NoteId}")]
         public IActionResult DeleteNotes(int NoteId)
         {
             try
@@ -96,7 +96,7 @@ namespace Fundoo_Notes.Controllers
         }
 
         [Authorize]
-        [HttpGet("getAllNoteusingRedis")]
+        [HttpGet("getAllNoteUsingRedis")]
         public async Task<IActionResult> GetAllNotes()
         {
             try
@@ -120,7 +120,6 @@ namespace Fundoo_Notes.Controllers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -147,13 +146,13 @@ namespace Fundoo_Notes.Controllers
             }
         }
         [Authorize]
-        [HttpPut("pinnotes/{NoteId}")]
-        public async Task<IActionResult> PinNotes(int NoteId)
+        [HttpPut("pinNotes/{NoteId}/{userId}")]
+        public async Task<IActionResult> PinNotes(int NoteId,int userId)
         {
             try
             {
-                var result = NotesBL.PinNote(NoteId);
-                await NotesBL.PinNote(NoteId);
+                var result = NotesBL.PinNote(NoteId,userId);
+                await NotesBL.PinNote(NoteId,userId);
                 if (result != null)
                 {
                     return this.Ok(new { Success = true, message = "Pin changed successfully", Response = result });
@@ -169,13 +168,13 @@ namespace Fundoo_Notes.Controllers
             }
         }
         [Authorize]
-        [HttpPut("archiveNote/{NoteId}")]
-        public async Task<IActionResult> ArchieveNotes(int NoteId)
+        [HttpPut("archiveNote/{NoteId}/{userId}")]
+        public async Task<IActionResult> ArchieveNotes(int NoteId,int userId)
         {
             try
             {
-                var result = NotesBL.ArchieveNote(NoteId);
-                await NotesBL.ArchieveNote(NoteId);
+                var result = NotesBL.ArchieveNote(NoteId,userId);
+                await NotesBL.ArchieveNote(NoteId,userId);
                 if (result != null)
                 {
                     return this.Ok(new { Success = true, message = "Archieve changed successfully", Response = result });
@@ -191,13 +190,13 @@ namespace Fundoo_Notes.Controllers
             }
         }
         [Authorize]
-        [HttpPut("trash/{NoteId}")]
-        public async Task<IActionResult> TrashNotes(int NoteId)
+        [HttpPut("trash/{NoteId}/{userId}")]
+        public async Task<IActionResult> TrashNotes(int NoteId, int userId)
         {
             try
             {
-                var result = NotesBL.TrashNote(NoteId);
-                await NotesBL.TrashNote(NoteId);
+                var result = NotesBL.TrashNote(NoteId,userId);
+                await NotesBL.TrashNote(NoteId,userId);
                 if (result != null)
                 {
                     return this.Ok(new { Success = true, message = "Trash changed successfully", Response = result });

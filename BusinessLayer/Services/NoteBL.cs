@@ -83,11 +83,11 @@ namespace BusinessLayer.Services
             }
         }
 
-        public async Task ArchieveNote(int NoteId)
+        public async Task ArchieveNote(int NoteId,int userId)
         {
             try
             {
-                await noteRL.ArchieveNote(NoteId);
+                await noteRL.ArchieveNote(NoteId,userId);
             }
             catch (Exception e)
             {
@@ -95,11 +95,11 @@ namespace BusinessLayer.Services
             }
         }
 
-        public async Task PinNote(int NoteId)
+        public async Task PinNote(int NoteId,int userId)
         {
             try
             {
-                await noteRL.PinNote(NoteId);
+                await noteRL.PinNote(NoteId,userId);
             }
             catch (Exception e)
             {
@@ -107,11 +107,11 @@ namespace BusinessLayer.Services
             }
         }
 
-        public async Task TrashNote(int NoteId)
+        public async Task TrashNote(int NoteId, int userId)
         {
             try
             {
-                await noteRL.TrashNote(NoteId);
+                await noteRL.TrashNote(NoteId,userId);
             }
             catch (Exception e)
             {
