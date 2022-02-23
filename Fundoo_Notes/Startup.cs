@@ -43,6 +43,10 @@ namespace Fundoo_Notes
             {
                 options.Configuration = "localhost:6379";
             });
+
+            services.AddControllers().AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+           );
             //adds swagger generator to the services collection
             services.AddSwaggerGen(setup =>
             {
@@ -75,6 +79,9 @@ namespace Fundoo_Notes
             services.AddTransient<ILabelRL, LabelRL>();
             services.AddTransient<IUserAddressBL, UserAddressBL>();
             services.AddTransient<IUserAddressRL, UserAddressRL>();
+            services.AddTransient<ICollabBL, CollabratorBL>();
+            services.AddTransient<ICollabRL, CollabratorRL>();
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

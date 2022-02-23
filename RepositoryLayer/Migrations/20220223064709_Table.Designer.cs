@@ -10,7 +10,7 @@ using RepositoryLayer.Services;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(FundooDBContext))]
-    [Migration("20220220184326_Table")]
+    [Migration("20220223064709_Table")]
     partial class Table
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,31 @@ namespace RepositoryLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("RepositoryLayer.Entities.Collabarator", b =>
+                {
+                    b.Property<int>("CollabId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CollabEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("noteId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("userId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CollabId");
+
+                    b.HasIndex("noteId");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("collab");
+                });
 
             modelBuilder.Entity("RepositoryLayer.Entities.Label", b =>
                 {
@@ -32,15 +57,15 @@ namespace RepositoryLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NoteId")
+                    b.Property<int?>("noteId")
                         .HasColumnType("int");
 
-                    b.Property<int>("userId")
+                    b.Property<int?>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("LabelId");
 
-                    b.HasIndex("NoteId");
+                    b.HasIndex("noteId");
 
                     b.HasIndex("userId");
 
@@ -81,7 +106,7 @@ namespace RepositoryLayer.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("userId")
+                    b.Property<int?>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("noteId");
@@ -98,7 +123,7 @@ namespace RepositoryLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Address")
+                    b.Property<string>("AddressType")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
@@ -107,7 +132,7 @@ namespace RepositoryLayer.Migrations
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("userId")
+                    b.Property<int?>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("AddressId");
@@ -160,19 +185,30 @@ namespace RepositoryLayer.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("RepositoryLayer.Entities.Collabarator", b =>
+                {
+                    b.HasOne("RepositoryLayer.Entities.Note", "Notes")
+                        .WithMany("Collab")
+                        .HasForeignKey("noteId");
+
+                    b.HasOne("RepositoryLayer.Entities.UserModel", "User")
+                        .WithMany("Collab")
+                        .HasForeignKey("userId");
+
+                    b.Navigation("Notes");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("RepositoryLayer.Entities.Label", b =>
                 {
                     b.HasOne("RepositoryLayer.Entities.Note", "Notes")
-                        .WithMany()
-                        .HasForeignKey("NoteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Label")
+                        .HasForeignKey("noteId");
 
                     b.HasOne("RepositoryLayer.Entities.UserModel", "User")
-                        .WithMany()
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Label")
+                        .HasForeignKey("userId");
 
                     b.Navigation("Notes");
 
@@ -182,10 +218,8 @@ namespace RepositoryLayer.Migrations
             modelBuilder.Entity("RepositoryLayer.Entities.Note", b =>
                 {
                     b.HasOne("RepositoryLayer.Entities.UserModel", "user")
-                        .WithMany()
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Note")
+                        .HasForeignKey("userId");
 
                     b.Navigation("user");
                 });
@@ -193,12 +227,28 @@ namespace RepositoryLayer.Migrations
             modelBuilder.Entity("RepositoryLayer.Entities.UserAddress", b =>
                 {
                     b.HasOne("RepositoryLayer.Entities.UserModel", "User")
-                        .WithMany()
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Addresses")
+                        .HasForeignKey("userId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RepositoryLayer.Entities.Note", b =>
+                {
+                    b.Navigation("Collab");
+
+                    b.Navigation("Label");
+                });
+
+            modelBuilder.Entity("RepositoryLayer.Entities.UserModel", b =>
+                {
+                    b.Navigation("Addresses");
+
+                    b.Navigation("Collab");
+
+                    b.Navigation("Label");
+
+                    b.Navigation("Note");
                 });
 #pragma warning restore 612, 618
         }

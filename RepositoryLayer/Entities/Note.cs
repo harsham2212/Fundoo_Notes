@@ -13,8 +13,10 @@ namespace RepositoryLayer.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int noteId { get; set; }
+
         [ForeignKey("User")]
-        public int userId { get; set; }
+        public int? userId { get; set; }
+
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsReminder { get; set; }
@@ -26,5 +28,8 @@ namespace RepositoryLayer.Entities
         public bool IsTrash { get; set; }
 
         public virtual UserModel user { get; set; }
+        public virtual IList<Collabarator> Collab { get; set; }
+
+        public virtual IList<Label> Label { get; set; }
     }
 }

@@ -14,15 +14,15 @@ namespace RepositoryLayer.Entities
         public int AddressId { get; set; }
 
         [ForeignKey("User")]
-        public int userId { get; set; } 
+        public int? userId { get; set; } 
         
-        public string Address { get; set; }
+        public string AddressType { get; set; }
         
         public string City { get; set; }
         
         public string State { get; set; }
-        
+
         public virtual UserModel User { get; set; }
-        
+
     }
 }

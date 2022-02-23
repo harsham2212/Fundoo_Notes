@@ -25,7 +25,7 @@ namespace RepositoryLayer.Services
                 UserAddress address = new UserAddress();
                 address.AddressId = new UserAddress().AddressId;
                 address.userId = userId;
-                address.Address = userAddress.Address;
+                address.AddressType = userAddress.AddressType;
                 address.City = userAddress.City;
                 address.State = userAddress.State;
                 dbContext.Address.Add(address);
@@ -42,6 +42,7 @@ namespace RepositoryLayer.Services
             try
             {
                 UserAddress useraddress = dbContext.Address.Where(e => e.userId == userId).FirstOrDefault();
+                useraddress.AddressType = userAddress.AddressType;
                 useraddress.City = userAddress.City;
                 useraddress.State = userAddress.State;
 

@@ -8,7 +8,7 @@ namespace CommonLayer.UserAddress
     public class UserAddressPostModel
     {
         [Required]
-        public string Address { get; set; }
+        public string AddressType { get; set; }
         [Required]
         public string City { get; set; }
         [Required]

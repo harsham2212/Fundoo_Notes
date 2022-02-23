@@ -1,5 +1,6 @@
 ﻿using CommonLayer.User;
 using Experimental.System.Messaging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RepositoryLayer.Entities;
 using RepositoryLayer.Interface;
@@ -182,7 +183,9 @@ namespace RepositoryLayer.Class
         {
             try
             {
-                var result = dbContext.Users.ToList();
+                var result = dbContext.Users.Include(u => u.Addresses)
+                    .Include(u => u.Note)
+                    .Include(u => u.Label).ToList();
                 return result;
             }
             catch (Exception e)

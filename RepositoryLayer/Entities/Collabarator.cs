@@ -6,23 +6,20 @@ using System.Text;
 
 namespace RepositoryLayer.Entities
 {
-    public class Label
+    public class Collabarator
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
-        public int LabelId { get; set; }
-        
-        [Required]
-        public string LabelName { get; set; }
+        public int CollabId { get; set; }
+        public string CollabEmail { get; set; }
 
-        public virtual Note Notes { get; set; }
-        public virtual UserModel User { get; set; }
-
-        [ForeignKey("Note")]
+        [ForeignKey("Notes")]
         public int? noteId { get; set; }
+        public virtual Note Notes { get; set; }
 
         [ForeignKey("User")]
         public int? userId { get; set; }
+        public virtual UserModel User { get; set; }
     }
 }

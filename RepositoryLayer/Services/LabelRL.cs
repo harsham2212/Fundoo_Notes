@@ -27,7 +27,7 @@ namespace RepositoryLayer.Services
 
                 Label labels = new Label();
                 labels.userId = userId;
-                labels.NoteId = noteId;
+                labels.noteId = noteId;
                 labels.LabelId = new Label().LabelId;
                 labels.LabelName = labelModel.LabelName;
                 dbContext.Label.Add(labels);
@@ -81,15 +81,24 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public async Task<List<Label>> GetAllLabels(int userId)
+        public async Task<List<LabelResponse>> GetAllLabels(int userId)
         {
             Label label = new Label();
             try
             {
-                return await dbContext.Label.Where(u => u.userId == userId)
-                    .Include(u => u.Notes)
-                    .Include(u => u.User)
-                    .ToListAsync();
+                return await dbContext.Label.Where(l => l.userId == userId)
+                   .Join(dbContext.Users,
+                l => l.userId,
+                u => u.userId,
+                (l, u) => new LabelResponse
+                {
+                    userId = (int)l.userId,
+                    email = u.email,
+                    LabelName = l.LabelName,
+                    fname = u.fname,
+                    lname = u.lname,
+                    phoneNo=u.phoneNo
+                }).ToListAsync();
             }
             catch (Exception e)
             {
@@ -97,11 +106,11 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public async Task<List<Label>> GetLabelsByNoteID(int userId, int NoteId)
+        public async Task<List<Label>> GetLabelsByNoteID(int userId, int noteId)
         {
             try
             {
-                return await dbContext.Label.Where(e => e.NoteId == NoteId && e.userId == userId)
+                return await dbContext.Label.Where(e => e.noteId == noteId && e.userId == userId)
                     .Include(u => u.Notes)
                     .Include(u => u.User)
                     .ToListAsync();

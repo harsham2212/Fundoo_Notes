@@ -133,7 +133,7 @@ namespace Fundoo_Notes.Controllers
                 var result = NotesBL.Color(NoteId, color);
                 if (result != null)
                 {
-                    return this.Ok(new { Success = true, message = "Color changed successfully", Response = result });
+                    return this.Ok(new { Success = true, message = "Color changed successfully"});
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace Fundoo_Notes.Controllers
                 await NotesBL.PinNote(NoteId,userId);
                 if (result != null)
                 {
-                    return this.Ok(new { Success = true, message = "Pin changed successfully", Response = result });
+                    return this.Ok(new { Success = true, message = "Pin changed successfully"});
                 }
                 else
                 {
@@ -177,7 +177,7 @@ namespace Fundoo_Notes.Controllers
                 await NotesBL.ArchieveNote(NoteId,userId);
                 if (result != null)
                 {
-                    return this.Ok(new { Success = true, message = "Archieve changed successfully", Response = result });
+                    return this.Ok(new { Success = true, message = "Archieve changed successfully"});
                 }
                 else
                 {
@@ -199,7 +199,7 @@ namespace Fundoo_Notes.Controllers
                 await NotesBL.TrashNote(NoteId,userId);
                 if (result != null)
                 {
-                    return this.Ok(new { Success = true, message = "Trash changed successfully", Response = result });
+                    return this.Ok(new { Success = true, message = "Trash changed successfully"});
                 }
                 else
                 {
@@ -213,13 +213,13 @@ namespace Fundoo_Notes.Controllers
         }
 
         [Authorize]
-        [HttpGet("getbynoteId/{NoteId}")]
-        public IEnumerable<Note> GetAllNotesByUserId(int NoteId)
+        [HttpGet("getbynoteId/{noteId}")]
+        public IEnumerable<Note> GetAllNotesByUserId(int noteId)
         {
             //int NoteId = (User.Claims.FirstOrDefault(x => x.Type == "NoteId").Value);
             try
             {
-                return NotesBL.GetAllNotesByNoteId(NoteId);
+                return NotesBL.GetAllNotesByNoteId(noteId);
             }
             catch (Exception)
             {

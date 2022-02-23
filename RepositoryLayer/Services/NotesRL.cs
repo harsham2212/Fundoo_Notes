@@ -128,7 +128,6 @@ namespace RepositoryLayer.Services
                 if (note != null)
                 {
                     note.IsPin = true;
-
                     await dbContext.SaveChangesAsync();
                 }
             }
