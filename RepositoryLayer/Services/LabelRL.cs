@@ -1,4 +1,5 @@
 ﻿using CommonLayer.Label;
+using CommonLayer.Note;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Entities;
 using RepositoryLayer.Interface;
@@ -80,25 +81,72 @@ namespace RepositoryLayer.Services
                 throw e;
             }
         }
+        
+        //public async Task<List<LabelResponse>> GetAllLabels(int userId)
+        //{
+        //    Label label = new Label();
+        //    try
+        //    {
+        //        return await dbContext.Label.Where(l => l.userId == userId)
+        //           .Join(dbContext.Users,
+        //        l => l.userId,
+        //        u => u.userId,
+        //        (l, u) => new LabelResponse
+        //        {
+        //            userId = (int)l.userId,
+        //            email = u.email,
+        //            LabelName = l.LabelName,
+        //            fname = u.fname,
+        //            lname = u.lname,
+        //            phoneNo=u.phoneNo
+        //        }).ToListAsync();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw e;
+        //    }
+        //}
 
         public async Task<List<LabelResponse>> GetAllLabels(int userId)
         {
-            Label label = new Label();
+            Label labels = new Label();
             try
             {
                 return await dbContext.Label.Where(l => l.userId == userId)
-                   .Join(dbContext.Users,
-                l => l.userId,
-                u => u.userId,
-                (l, u) => new LabelResponse
-                {
-                    userId = (int)l.userId,
-                    email = u.email,
-                    LabelName = l.LabelName,
-                    fname = u.fname,
-                    lname = u.lname,
-                    phoneNo=u.phoneNo
-                }).ToListAsync();
+
+                  .Join(dbContext.Users
+                  .Join(dbContext.Notes,
+                    u => u.userId,
+                    n => n.userId,
+                    (u, n) => new NoteUserResponse
+                    {
+                        userId = u.userId,
+                        noteId = n.noteId,
+                        fname = u.fname,
+                        lname = u.lname,
+                        RegisteredDate = n.CreateDate,
+                        Title = n.Title,
+                        Description = n.Description,
+                        email = u.email,
+                        phoneNo =u.phoneNo,
+
+                    }),
+                   l => l.Notes.noteId,
+                    un => un.noteId,
+                    (l, un) => new LabelResponse
+                    {
+                        userId = un.userId,
+                        noteId = l.Notes.noteId,
+                        Title = un.Title,
+                        Description = un.Description,
+                        RegisteredDate = un.RegisteredDate,
+                        fname = un.fname,
+                        lname = un.lname,
+                        email = un.email,
+                        phoneNo = un.phoneNo,
+                        LabelName = l.LabelName
+
+                    }).ToListAsync();
             }
             catch (Exception e)
             {
